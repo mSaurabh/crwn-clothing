@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Navigation } from "./components/navigation/navigation.component";
-import SignIn from "./components/sign-in/signin.component";
+import SignIn from "./components/sign-in/sign-in.component";
 import Home from "./routes/home/home.component";
 import Shop from "./routes/shop/shop.component";
 
