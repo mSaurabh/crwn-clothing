@@ -45,7 +45,21 @@ const SignInForm = () => {
         setUser(null);
       }
       alert(`User Successfully Signed ${user ? "out" : "in"}.`);
-    } catch (err) {}
+    } catch (err) {
+      console.log({ err });
+      switch (err.code) {
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+          alert("Invalid username and or password");
+          break;
+        case "auth/too-many-requests":
+          alert("Account has been fronzen for too many failed login attempts");
+          break;
+        default:
+          console.log({ err });
+          break;
+      }
+    }
   };
 
   const handleChange = (event) => {
@@ -82,10 +96,11 @@ const SignInForm = () => {
         <div className="buttons-container">
           <Button type="submit">{user ? "Sign Out" : "Sign In"}</Button>
           <Button
+            type="button"
             onClick={signInWithGoogle}
             buttonType={BUTTON_TYPE_CLASSES.GOOGLE}
           >
-            Sign In With Google
+            {"Google Sign In"}
           </Button>
         </div>
       </form>
