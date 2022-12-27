@@ -10,6 +10,8 @@ import {
   singInAuthUserWithEmailAndPassword
 } from "../../utils/firebase/firebase.utils";
 
+import { useContext } from "react";
+import { UserContext } from "../../context/user.context";
 import "./sign-in-form.styles.scss";
 
 const defaultFormFields = {
@@ -20,31 +22,32 @@ const defaultFormFields = {
 const SignInForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
-  const [user, setUser] = useState();
+  const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log({ formFields });
 
     try {
-      console.log(user);
-      if (!user) {
+      console.log(currentUser);
+      if (!currentUser) {
         console.log("Logging IN user");
         const response = await singInAuthUserWithEmailAndPassword(
           email,
           password
         );
         console.log(response);
-        setUser(response);
+        setCurrentUser(response);
       } else {
         console.log("Logging out user");
         await signOutUser();
-        setUser(null);
+        setCurrentUser(null);
       }
-      alert(`User Successfully Signed ${user ? "out" : "in"}.`);
+      alert(`User Successfully Signed ${currentUser ? "out" : "in"}.`);
     } catch (err) {
       console.log({ err });
       switch (err.code) {
@@ -94,7 +97,7 @@ const SignInForm = () => {
           value={password}
         />
         <div className="buttons-container">
-          <Button type="submit">{user ? "Sign Out" : "Sign In"}</Button>
+          <Button type="submit">{currentUser ? "Sign Out" : "Sign In"}</Button>
           <Button
             type="button"
             onClick={signInWithGoogle}
